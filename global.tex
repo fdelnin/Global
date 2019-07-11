@@ -110,7 +110,7 @@ In tutti i casi si ha che $ B(S) =B(P) + B(Q) $ e per ipotesi sappiamo che $ B(P
 
 In questo caso $size(S) = size(P)$ e $B(S)=B(P)$. 
 
-Per la regola RES $\pl \passo \pil$ quindi $size(S')= size(\pil) =size(P')$. Sappiamo che P fa un passo ($\alpha \not\in L$) e va in P', per cui $size(P) = 1+ size(P')>size(P') \Rightarrow size(S)>size(S')$. Per ipotesi induttiva $size(P')$ è finita per cui S termina.
+Per la regola RES $\pl \passo \pil$ quindi $size(S')= size(\pil) =size(P')$. Sappiamo che P fa un passo ($\alpha \not\in L$) e va in P', per cui $size(P) = 1+ size(P')>size(P') \implies size(S)>size(S')$. Per ipotesi induttiva $size(P')$ è finita per cui S termina.
 
 Inoltre $B(S) =B(P)$ e $B(S') =B(P')$ per ipotesi si ha che $B(P')$ è finito (in quanto sottoprocesso di S) per cui anche $B(S)$ lo è.
 
@@ -155,7 +155,9 @@ In questo caso sappiamo che $P$ è finito e applichiamo una restrizione a P, il 
 $P$ termina per ipotesi induttiva e stiamo applicando una funzione di relabeling ai canali di $P$, $size(S)=size(P)$ e quindi termina in un numero finito di passi dato che $P$ termina in un numero finito di passi per ipotesi.
 
 \paragraph{Caso $S= \sum_{i \in I}P_{i}$}
-in questo caso la somma è infinta, ci sono quindi infiniti $P_{i}$ che vengono sommati, per ipotesi induttiva ognuno dei $P_{i}$ termina in un numero finito passi ovvero $size(P_{i})=k$ con $k$ finito. $size(S) = max\{size(P_{i})| i \in I\}$, ma sappiamo che ogni $size(P_{i})$ è finita per cui anche $size(S)$ è finita.\\\\\\\\
+in questo caso la somma è infinta, ci sono quindi infiniti $P_{i}$ che vengono sommati, per ipotesi induttiva ognuno dei $P_{i}$ termina in un numero finito passi ovvero $size(P_{i})=k$ con $k$ finito. $size(S) = max\{size(P_{i})| i \in I\}$, ma sappiamo che ogni $size(P_{i})$ è finita per cui anche $size(S)$ è finita.\\\\\\
+
+Abbiamo quindi dimostrato che sia nel caso finito che nel caso infinito i processi CCS terminano in un numero finito di passi.
 
 
 
@@ -201,17 +203,17 @@ Dimostrare il teorema di Knaster-Tarski nel caso di reticoli completi
 
 \paragraph{Enunciato teorema}
 
-Sia L un reticolo completo e $f:L \rightarrow L$ una funzione monotona $\Rightarrow$ l'insieme dei punti fissi di $f$ in $L$ è un reticolo completo.
+Sia L un reticolo completo e $f:L \implies L$ una funzione monotona $\Rightarrow$ l'insieme dei punti fissi di $f$ in $L$ è un reticolo completo.
 
 \paragraph{Def. reticoli completi}: un insieme parzialmente ordinato in cui ogni sottoinsieme ha $lub$ e $glb$
 
 %TODO add def poset
 \subsection{Dimostrazione}
-Per dimostrare che l'insieme dei punti fissi di $f$ in $L$ è un reticolo completo dimostro che dato $\langle P,\leq\rangle$ l'insieme dei punti fissi di $f$:
+Per dimostrare che l'insieme dei punti fissi di $f$ in $L$ è un reticolo completo dimostro che dato $\langle P,\sqsubseteq\rangle$ l'insieme dei punti fissi di $f$:
 \begin{itemize}
-    \item il $lub$ di P = $gfp$ (greatest fixed point) di $f$ e quindi $\in L$
-    \item il $glb$ di P = $lfp$ (least fixed point) di $f$e quindi $\in L$
-    \item ogni sottoinsieme dei punti fissi di $f$ in $L$ ha $lub$ e $glb$ ed essi $\in L$
+    \item il $lub$ di P = $gfp$ (greatest fixed point) di $f$ e quindi $\in P$
+    \item il $glb$ di P = $lfp$ (least fixed point) di $f$ quindi $\in L$
+    \item ogni sottoinsieme dei punti fissi di $f$ in $L$ ha $lub$ e $glb$ ed essi $\in P$
 \end{itemize}
 
 I primi due punti dimostrano il Lemma di Knaster Tarski e il terzo dimostra che è un complete lattice.
@@ -219,41 +221,41 @@ I primi due punti dimostrano il Lemma di Knaster Tarski e il terzo dimostra che 
 \paragraph{Punto 1}
 %\subsection{Knaster Tarski in CCS}
 
-Dimostro che dato $P_{1}=\{x \in L | x  \leq f(x)\}$ ovvero l'insieme di tutti i postfix points il $lub$ di tale insieme è il greatest fixed point di $f$ (ed appartiene all'insieme).
+Dimostro che dato $P_{1}=\{x \in L | x  \sqsubseteq f(x)\}$ ovvero l'insieme di tutti i postfix points, il $lub$ di tale insieme è il greatest fixed point di $f$ (ed appartiene a $P1$).
 
-Si ha che $\forall x \in P_{1}$ vale $x \leq f(x)$ per definizione, per monotonia di $f$ si ha che $f(x)\leq f(f(x))$ e quindi $f(x) \in P_{1}$ 
+Si ha che $\forall x \in P_{1}$ vale $x \sqsubseteq f(x)$ per definizione, per monotonia di $f$ si ha che $f(x)\sqsubseteq f(f(x))$ $\implies$ $f(x) \in P_{1}$ 
 
-Sia $u=\lor P_{1}$ allora $\forall x \in P_{1}. x \leq u$ e per monotonia di $f$ vale anche che $\forall x \in P_{1}.f(x)\leq f(u)$, questo indica che $f(u)$ è un upper bound dell'insieme $P_{1}$ (perché $x \leq f(x) \leq f(u)$ ). Ma $u$ è il least upper bound quindi $u \leq f(u) \Rightarrow u \in P_{1}$.
+Sia $u=\sqcup P_{1}$ allora $\forall x \in P_{1} \; x \sqsubseteq u$ e per monotonia di $f$ vale anche che $\forall x \in P_{1} \; f(x)\sqsubseteq f(u)$, questo indica che $f(u)$ è un upper bound dell'insieme $P_{1}$ (perché $x \sqsubseteq f(x) \sqsubseteq f(u)$ ). Ma $u$ è il least upper bound quindi $u \sqsubseteq f(u) \implies u \in P_{1}$.
 
-Dato che $u \in P_{1}$ per monotonia di $f$ si ha che $f(u)\leq f(f(u)) \Rightarrow f(u) \in P_{1}$, quindi $f(u)\leq u$ Allora:
+Dato che $u \in P_{1}$ per monotonia di $f$ si ha che $f(u)\sqsubseteq f(f(u)) \implies f(u) \in P_{1}$, quindi $f(u)\sqsubseteq u$ Allora:
 \begin{itemize}
-    \item $u\leq f(u)$
-    \item $f(u)\leq u$
+    \item $u\sqsubseteq f(u)$
+    \item $f(u)\sqsubseteq u$
 \end{itemize}
-$\Rightarrow u=f(u)=\lor P_{1}$
-Siccome ogni fixed point appartiene all'insieme $P_{1}$ e $u=f(u)$ è il $lub$ di tale insieme, allora $f(u)$ è il lub per tutti i fixed point e quindi è il greatest fixed point, ed appartiene all'insieme.
+$\implies u=f(u)=\sqcup P_{1}$
 
-\paragraph{Punto 2} Dimostro che dato $\pd = \{x \in L | x \geq f(x) \}$ ovvero l'insieme dei prefixed point di $f$ in $L$ il $glb$ di tale insieme è uguale al least fixed point di $f$
+Siccome ogni fixed point appartiene all'insieme $P_{1}$, perché $\forall n \in P \; f(n)=n $ ovvero $n \sqsubseteq f(n) \implies n \in P_{1}$ e $u=f(u)=\sqcup P_{1}$ è il $lub$ di tale insieme, allora $\forall n \in P \; n \in P_{1} $ e $n = f(n) \sqsubseteq u = f(u) =\sqcup P_{1}$. Ovvero $u=f(u)$  è il più grande fixed point di $f$ ed è il $least\; upper\; bound$ di $P_{1}$ ed $\in P$ in quanto è un fixed point. 
 
-E' vero che $\forall x \in \pd x \geq f(x)$ e per monotonia di $f$: $f(x) \geq f(f(x)) \Rightarrow f(x) \in \pd$.
+\paragraph{Punto 2} Dimostro che dato $\pd = \{x \in L | x \sqsupseteq f(x) \}$ ovvero l'insieme dei prefixed point di $f$ in $L$, il $glb$ di tale insieme è uguale al least fixed point di $f$.
 
-Sia $g = \land \pd $ allora $g \leq x . \forall x \in \pd$. Per monotonia di $f$ è vero che $\forall x \in \pd . f(g) \leq f(x)$ ovvero $f(g)$ è un lower bound di $\pd$.
+E' vero che $\forall x \in \pd \; x \sqsupseteq f(x)$ e per monotonia di $f$: $f(x) \sqsupseteq f(f(x)) \implies f(x) \in \pd$.
 
-$g$ è il greatest lower bound di $\pd$ quindi $g \geq f(g) $, allora $g \in \pd$
+Sia $l = \sqcap \pd $ allora $l \sqsubseteq x \; \forall x \in \pd$. Per monotonia di $f$ è vero che $\forall x \in \pd \; f(l) \sqsubseteq f(x)$ ovvero $f(l)$ è un lower bound di $\pd$.
 
-Per monotonia di $f$ $f(g) \geq f(f(g)) \Rightarrow f(g) \in \pd$ e quindi $g\leq f(g)$ in quanto $g $ è greatest lower bound di $\pd$. Quindi:
+$l$ è il greatest lower bound di $\pd$ quindi $l \sqsupseteq f(l) $, allora $l \in \pd$ ($l$ è in L perché $f:L\to L$).
+
+Per monotonia di $f$: $f(l) \sqsupseteq f(f(l)) \Rightarrow f(l) \in \pd$ e quindi $l\sqsubseteq f(l)$ in quanto $l$ è greatest lower bound di $\pd$, ovvero è minore o uguale a tutti gli elementi di $\pd$. Quindi:
 \begin{itemize}
-    \item $g\geq f(g)$
-    \item $f(g) \geq g$
+    \item $l\sqsupseteq f(l)$
+    \item $f(l) \sqsupseteq l$
 \end{itemize}
-
-$\Rightarrow g = f(g) = \land \pd$. $g$ è chiaramente un fixed point, e siccome tutti i fixed point appartengono a $\pd$  e $f(g) $ è il greatest lower bound di $\pd$ $\Rightarrow f(g)$ è il least fixed point, ed appartiene a $L$.
+$\implies l = f(l) = \sqcap \pd $. $ l $ è chiaramente un fixed point, e siccome tutti i fixed point appartengono a $ \pd $ perchè $ \forall n \in P \; f(n) = n $ è vero anche che $ n \sqsupseteq f(n) \implies n \in P_{2} $ e $l=f(l)$ è il greatest lower bound di $\pd$ $\implies f(l) \sqsubseteq x \; \forall x \in \pd $ quindi è più piccolo di tutti gli elementi in $\pd$ quindi anche di tutti i fixed point, ovvero è il least fixed point di $f$ in $L$ ed appartiene a $L$ perché $f$ ha dominio in $L$.
 
 \paragraph{Punto 3} Devo dimostrare che per ogni sottoinsieme di $P$ esistono $lub$ e $glb$ e cha appartengono a $P$.
 
-Sia $ S \subseteq P$ e $ s = \lor S$ (least upper bound di S), dimostro che esiste un elemento di P che è maggiore di tutti gli elementi di S, e che tale elemento è il più piccolo elemento di P (comunque più grande di S).
+Sia $ S \subseteq P$ e $ s = \sqcup S$ (least upper bound di S), dimostro che esiste un elemento di P che è maggiore di tutti gli elementi di S, e che tale elemento è il più piccolo elemento di P (comunque più grande di S).
 
-Definisco $U = \{ x\in P| s \leq x\}$ ovvero l'insieme degli elementi più grandi di $s$ in $P$ (upper closure). $U$ è quindi l'intervallo degli elementi da $s$ al Top element di $L$: $U=[s....\top]$. Si ha che $s \in U$.
+Definisco $U = \{ x\in P| s \sqsubseteq x\}$ ovvero l'insieme degli elementi più grandi di $s$ in $P$ (upper closure). $U$ è quindi l'intervallo degli elementi da $s$ al Top element di $L$: $U=[s....\top]$. Si ha che $s \in U$.
 
 Ora dimostro che U è chiuso rispetto a $f$, ovvero:
 \paragraph{Definizione di chiusura} sia $f: S \to T$, e $S'\subseteq S$, allora si dice che $S'$ è chiuso rispetto ad $f$ se e solo se:
@@ -261,24 +263,24 @@ $f[S'] \subseteq S'$, dove $f[S']$ è l'immagine di $f$ in $S$.\\
 
 Quindi voglio dimostrare che $f[U] \subseteq U$. Dimostro che: 
 \begin{itemize}
-    \item[\textbf{a}] $s \leq f(s)$
-    \item[\textbf{b}] $\forall x \in U$ $s \leq f(x)$
+    \item[\textbf{a}] $s \sqsubseteq f(s)$
+    \item[\textbf{b}] $\forall x \in U$ $s \sqsubseteq f(x)$
 \end{itemize}
 
-\paragraph{a} $\forall e \in S$ vale che $ e \leq s$ per definizione di lub. Dato che $S$ è un sottoinsieme dei punti fissi vale che $ e = f(e)$ e per monotonia di $f $ vale che $f(e) \leq f(s)$ $\Rightarrow$ $\forall e \in S. e \leq f(s)$, ovvero $f(s)$ è un upper bound di S, ma per definizione di least upper bound si ha che $s \leq f(s)$.
+\paragraph{a} $\forall e \in S$ vale che $ e \sqsubseteq s$ per definizione di lub. Dato che $S$ è un sottoinsieme dei punti fissi vale che $ e = f(e)$ e per monotonia di $f $ vale che $f(e) \sqsubseteq f(s) \implies \forall e \in S. e \sqsubseteq f(s)$, ovvero $f(s)$ è un upper bound di S, ma per definizione di least upper bound si ha che $s \sqsubseteq f(s)$.
 
-\paragraph{b} $\forall x \in  U$ $s \leq x$ per definizione di $U$. Per monotonia di $f$: $f(s) \leq f(x)$, per \textbf{a} $s \leq f(s)$ $\Rightarrow$ $s \leq f(x) \forall x \in U$. \\\\
+\paragraph{b} $\forall x \in  U$ $s \sqsubseteq x$ per definizione di $U$. Per monotonia di $f$: $f(s) \sqsubseteq f(x)$, per \textbf{a} $s \sqsubseteq f(s) \implies s \sqsubseteq f(x) \forall x \in U$. \\\\
 
- Per \textbf{a} e \textbf{b} $\Rightarrow$ $\forall x \in U $ $f(x) \in U$. Ovvero $U$ è chiuso rispetto ad $f$.
+ Per \textbf{a} e \textbf{b} $\implies \forall x \in U $ $f(x) \in U$. Ovvero $U$ è chiuso rispetto ad $f$.
 
 
-Siccome $f: U \to U $ e U è un reticolo completo in quanto intervallo di un reticolo completo ($L$), e per \textbf{Punto 1} e \textbf{Punto 2} vale che $f:U \to U$ con $U$ reticolo completo ha lub e glb  in U $\Rightarrow$ $f$ ha lub e glb in $U$ e lub=greatest fixed point e glb=least fixed point di $f$ in U.
+Siccome $f: U \to U $ e U è un reticolo completo in quanto intervallo di un reticolo completo ($L$), e per \textbf{Punto 1} e \textbf{Punto 2} vale che $f:U \to U$ con $U$ reticolo completo ha lub e glb  in U $\implies f$ ha lub e glb in $U$ e lub=greatest fixed point e glb=least fixed point di $f$ in U.
 
 %to do dimostra che least fixed point è il lub di S , che vale lo stesso per glb e che vale per ogni sottoinsieme di P => p è complete lattica
 
-Siccome $s \leq x \forall x \in U$ allora s è il greatest lower bound di U, quindi s = least fixed point di $f$ in $U$. Allora $S$ ha lub in $F$ perchè il lub di $S = s =$ least fixed point di $f$ in $U$ e quindi $\in F$.\\
+Siccome $s \sqsubseteq x \forall x \in U$ allora s è il greatest lower bound di U, quindi s = least fixed point di $f$ in $U$. Allora $S$ ha lub in $F$ perchè il lub di $S = s =$ least fixed point di $f$ in $U$ e quindi $\in F$.\\
 
-Analogamente i può dimostrare che $S$ ha glb in $F$, e siccome questo vale $\forall S \subseteq P$ $\Rightarrow$ $P$ è un reticolo completo
+Analogamente i può dimostrare che $S$ ha glb in $F$, e siccome questo vale $\forall S \subseteq P \implies P$ è un reticolo completo
 
 
 \subsection{Knaster Tarski in CCS}
@@ -291,9 +293,9 @@ Sia $R \subseteq Proc \times Proc$ tc se $(P, Q) \in R$ allora:
 
 Definisco $$F(R) = \{ (P,Q) | \text{proprietà sopra} \} $$
 
-Allora se $(P,Q) \in R \Rightarrow (P,Q) \in F(R)$, ovvero $R \subseteq F(R)$ cioè $R$ è bisismulazione.
+Allora se $(P,Q) \in R \implies (P,Q) \in F(R)$, ovvero $R \subseteq F(R)$ cioè $R$ è bisismulazione.
 
-F è monotona perchè più grande è R più coppie ci sono in F(R) (mantiene la relazione di $\leq$ da $R$ a $F$).
+F è monotona perchè più grande è R più coppie ci sono in F(R) (mantiene la relazione di $\sqsubseteq$ da $R$ a $F$).
 
 $R$ è bisimulazione sse $R \subseteq F(R)$. $ \sim= \cup$bisimulazioni cioè $\sim = \cup \{ R |R $ è bisimulazione$\} = \cup \{R | R \subseteq F(R)\} $ quindi $\sim = $ max Fixed Point$(F)$.
 %TODO scrivi meglio e dì perché è reticolo completo
