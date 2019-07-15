@@ -205,7 +205,20 @@ Dimostrare il teorema di Knaster-Tarski nel caso di reticoli completi
 
 Sia L un reticolo completo e $f:L \implies L$ una funzione monotona $\Rightarrow$ l'insieme dei punti fissi di $f$ in $L$ è un reticolo completo.
 
-\paragraph{Def. reticoli completi}: un insieme parzialmente ordinato in cui ogni sottoinsieme ha $lub$ e $glb$
+\paragraph{Def. Upper Bound}: sia $S$ un insieme di numeri reali, $x$ è un upper bound di $S$ se $x \geq s \;\forall s \in S$ 
+
+\paragraph{Def. Least Upper Bound}: $x$ è un Least Upper Bound di $S$ se $x \leq y \; \forall y $ upper bounds di $S$
+
+\paragraph{Def. Insieme Parzialmente Ordinato}: è un insieme $I$ su cui per ogni sua coppia di elementi vale una relazione binaria $\sqsubseteq$ che soddisfa i seguenti assiomi:
+\begin{itemize}
+\item riflessività (ogni elemento è in relazione con sè stesso)
+\item antisimmetria ($a \leq b, \; b \leq a \implies a=b$)
+\item transitività ($a \leq b, \; b \leq c \implies a \leq c$)
+\end{itemize}
+
+
+
+\paragraph{Def. Reticoli Completi}: un insieme parzialmente ordinato in cui ogni sottoinsieme ha $lub$ e $glb$
 
 %TODO add def poset
 \subsection{Dimostrazione}
@@ -225,16 +238,19 @@ Dimostro che dato $P_{1}=\{x \in L | x  \sqsubseteq f(x)\}$ ovvero l'insieme di 
 
 Si ha che $\forall x \in P_{1}$ vale $x \sqsubseteq f(x)$ per definizione, per monotonia di $f$ si ha che $f(x)\sqsubseteq f(f(x))$ $\implies$ $f(x) \in P_{1}$ 
 
-Sia $u=\sqcup P_{1}$ allora $\forall x \in P_{1} \; x \sqsubseteq u$ e per monotonia di $f$ vale anche che $\forall x \in P_{1} \; f(x)\sqsubseteq f(u)$, questo indica che $f(u)$ è un upper bound dell'insieme $P_{1}$ (perché $x \sqsubseteq f(x) \sqsubseteq f(u)$ ). Ma $u$ è il least upper bound quindi $u \sqsubseteq f(u) \implies u \in P_{1}$.
+Sia $u=\sqcup P_{1}$ allora $\forall x \in P_{1} \; x \sqsubseteq u$ e per monotonia di $f$ vale anche che $\forall x \in P_{1} \; f(x)\sqsubseteq f(u)$, questo indica che $f(u)$ è un upper bound dell'insieme $P_{1}$ (perché $x \sqsubseteq f(x) \sqsubseteq f(u)$ ). Ma $u$ è il least upper bound quindi $$u \sqsubseteq f(u) \implies u \in P_{1}$$.
 
-Dato che $u \in P_{1}$ per monotonia di $f$ si ha che $f(u)\sqsubseteq f(f(u)) \implies f(u) \in P_{1}$, quindi $f(u)\sqsubseteq u$ Allora:
+Dato che $u \in P_{1}$ per monotonia di $f$ si ha che $$f(u)\sqsubseteq f(f(u)) \implies f(u) \in P_{1}$$
+ quindi $f(u)\sqsubseteq u$ Allora:
 \begin{itemize}
     \item $u\sqsubseteq f(u)$
     \item $f(u)\sqsubseteq u$
 \end{itemize}
-$\implies u=f(u)=\sqcup P_{1}$
+$\implies u=f(u)=\sqcup P_{1}$ e $\in P_{1}$.
 
-Siccome ogni fixed point appartiene all'insieme $P_{1}$, perché $\forall n \in P \; f(n)=n $ ovvero $n \sqsubseteq f(n) \implies n \in P_{1}$ e $u=f(u)=\sqcup P_{1}$ è il $lub$ di tale insieme, allora $\forall n \in P \; n \in P_{1} $ e $n = f(n) \sqsubseteq u = f(u) =\sqcup P_{1}$. Ovvero $u=f(u)$  è il più grande fixed point di $f$ ed è il $least\; upper\; bound$ di $P_{1}$ ed $\in P$ in quanto è un fixed point. 
+Siccome ogni fixed point appartiene all'insieme $P_{1}$, perché $$\forall n \in P \; f(n)=n  \;\text{ovvero} \; n \sqsubseteq f(n) \implies n \in P_{1}$$ e $u=f(u)=\sqcup P_{1}$ è il $lub$ di tale insieme, allora $\forall n \in P \; n \in P_{1} $ e $$n = f(n) \sqsubseteq u = f(u) =\sqcup P_{1}$$
+
+Ovvero $u=f(u)$  è il più grande fixed point di $f$ ed è il $least\; upper\; bound$ di $P_{1}$ ed $\in P$ in quanto è un fixed point. 
 
 \paragraph{Punto 2} Dimostro che dato $\pd = \{x \in L | x \sqsupseteq f(x) \}$ ovvero l'insieme dei prefixed point di $f$ in $L$, il $glb$ di tale insieme è uguale al least fixed point di $f$.
 
@@ -251,9 +267,34 @@ Per monotonia di $f$: $f(l) \sqsupseteq f(f(l)) \Rightarrow f(l) \in \pd$ e quin
 \end{itemize}
 $\implies l = f(l) = \sqcap \pd $. $ l $ è chiaramente un fixed point, e siccome tutti i fixed point appartengono a $ \pd $ perchè $ \forall n \in P \; f(n) = n $ è vero anche che $ n \sqsupseteq f(n) \implies n \in P_{2} $ e $l=f(l)$ è il greatest lower bound di $\pd$ $\implies f(l) \sqsubseteq x \; \forall x \in \pd $ quindi è più piccolo di tutti gli elementi in $\pd$ quindi anche di tutti i fixed point, ovvero è il least fixed point di $f$ in $L$ ed appartiene a $L$ perché $f$ ha dominio in $L$.
 
-\paragraph{Punto 3} Devo dimostrare che per ogni sottoinsieme di $P$ esistono $lub$ e $glb$ e cha appartengono a $P$.
+\paragraph{Punto 3}
+Devo dimostrare che per ogni sottoinsieme di $P$ esistono $lub$ e $glb$ e cha appartengono a $P$, ovvero che sono punti fissi.
 
-Sia $ S \subseteq P$ e $ s = \sqcup S$ (least upper bound di S), dimostro che esiste un elemento di P che è maggiore di tutti gli elementi di S, e che tale elemento è il più piccolo elemento di P (comunque più grande di S).
+Sia $ S \subseteq P$ e $ q = \sqcup S$ (least upper bound di S), $q$ esiste perché $S \subseteq P \subseteq L$ e L è un complete lattice, quindi per definizione di complete lattice ogni suo sottoinsieme ha lub e glb in $L$.\\\\
+Sia inoltre $$I=\{x \in L | q \sqsubseteq x\}$$
+
+\subparagraph{3.1}Si ha che (per riflessività della relazione d'ordine) $q \sqsubseteq q \implies q \in I$.
+
+Per defizione $q$ è il glb dell'insieme $I$, in quanto è il più grande elemento che è più piccolo di ogni elemento appartente all'insieme, $q=glb(I)= \sqcap I \implies glb(I) \in I$\\\\
+
+$I$ è un intervallo e $I\subseteq L$ quindi ha un lub in $L$, inoltre è vero che $$\forall x \in I \; x \sqsubseteq lub(I)$$ 
+
+ma sappiamo anche che $$\forall x \in I \; q \sqsubseteq x$$ 
+Allora
+$$\implies q \sqsubseteq x \sqsubseteq lub(I) \implies lub(I) \in I$$
+
+\subparagraph{3.2}
+Per definizione di $I$ e di $S$ si ha che $$ \forall x \in I, \; \forall s \in S \; s \sqsubseteq q\; \text{e}\; q \sqsubseteq x  $$
+
+Per monotonia di $f$ vale quindi $f(s)\sqsubseteq f(q)\sqsubseteq f(x)\; \forall x \in I, \; \forall s \in S  $
+$$\implies f(s) \sqsubseteq f(x)$$
+Per definizione di $S$ ogni elemento in $S$ è un punto fisso (sottoinsieme di $P$), quindi $$\forall s \in S \; \forall x \in I \; f(s)=s\sqsubseteq f(x)$$
+
+Quindi $f(x)$ è un upper bound dell'insieme $S$, $\implies q=lub(S) \sqsubseteq f(x) $ ovvero $q\sqsubseteq f(x) \forall x \in I$
+
+Possiamo però dimostrare che $f(x) \in I$?
+
+\begin{comment} Sia $ S \subseteq P$ e $ s = \sqcup S$ (least upper bound di S), dimostro che esiste un elemento di P che è maggiore di tutti gli elementi di S, e che tale elemento è il più piccolo elemento di P (comunque più grande di S).
 
 Definisco $U = \{ x\in P| s \sqsubseteq x\}$ ovvero l'insieme degli elementi più grandi di $s$ in $P$ (upper closure). $U$ è quindi l'intervallo degli elementi da $s$ al Top element di $L$: $U=[s....\top]$. Si ha che $s \in U$.
 
@@ -281,7 +322,7 @@ Siccome $f: U \to U $ e U è un reticolo completo in quanto intervallo di un ret
 Siccome $s \sqsubseteq x \forall x \in U$ allora s è il greatest lower bound di U, quindi s = least fixed point di $f$ in $U$. Allora $S$ ha lub in $F$ perchè il lub di $S = s =$ least fixed point di $f$ in $U$ e quindi $\in F$.\\
 
 Analogamente i può dimostrare che $S$ ha glb in $F$, e siccome questo vale $\forall S \subseteq P \implies P$ è un reticolo completo
-
+\end{comment}
 
 \subsection{Knaster Tarski in CCS}
 
