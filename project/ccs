@@ -1,0 +1,24 @@
+PortaAperta=bussa.'ok.'entra.PortaAperta+lock.PortaChiusa;
+PortaChiusa=bussa.'notok.PortaChiusa+unlock.PortaAperta;
+
+Counter=entra.Counter1+statusRoom.'zero.Counter;
+Counter1=entra.Counter2+statusRoom.'someone.Counter1+esci.Counter;
+Counter2=entra.Counter3+statusRoom.'someone.Counter2+esci.Counter1;
+Counter3=statusRoom.'party.Counter3 +esci.Counter2;
+
+Turno='changeToStudents.Turno1;
+Turno0=changeToDean.'deanturn.Turno1+changeToStudent.Turno0;
+Turno1=changeToStudents.'studentiturn.Turno0+changeToDean.Turno1;
+
+Studente0=studentiturn.'bussa.(ok.'changeToDean.StudenteEsci+notok.'changeToDean.Studente0); *altristud
+StudenteEsci=studentiturn.'esci.0;
+
+Studente1=studentiturn.'bussa.(ok.'changeToDean.StudenteEsci1+notok.'changeToDean.Studente1); *altristud
+StudenteEsci1=studentiturn.'esci.0;
+
+
+Dean=deanturn.'statusRoom.(zero.'lock.'unlock.Dean+someone.'chengeToStudents.Dean+party.'lock.'changeToStudents.DeanFineParty);
+DeanFineParty=deanturn.'statusRoom.(someone.'changeToStudents.DeanFineParty+party.'changeToStudents.DeanFineParty+zero.'unlock.'changeToStudents.Dean);
+
+P=(Turno|Studente0|Dean|Counter|PortaAperta|Studente1)\{changeToDean, changeToStudents,deanturn, studentiturn, bussa, ok, notok};
+
