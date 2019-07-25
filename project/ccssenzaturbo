@@ -1,0 +1,31 @@
+DoorLocked= unlock.DoorUnlocked+checkDoor.'locked.DoorLocked;
+DoorUnlocked= lock.DoorLocked+checkDoor.'unlocked.DoorUnlocked;
+
+Room0=status.'empty.Room0+bussa.'checkDoor.(locked.'not.Room0+unlocked.'studenteEntrato.'enter.Room1);
+Room1=status.'someone.Room1+bussa.'checkDoor.(locked.'not.Room1+unlocked.'studenteEntrato.'partystarted.'enter.Room2)+esci.'studenteUscito.Room0;
+Room2=status.'party.Room2+bussa.'checkDoor.(locked.'not.Room2+unlocked.'studenteEntrato.'enter.Room3)+esci.'studenteUscito.Room1;
+Room3=status.'party.Room3+bussa.'checkDoor.(locked.'not.Room3+unlocked.'studenteEntrato.'enter.Room4)+esci.'studenteUscito.Room2;
+Room4=status.'party.Room4+esci.'studenteUscito.Room3;
+
+Student0=studentiturn.'bussa.(enter.'deanturn.StudenteEsci+not.'deanturn.Student0); 
+StudenteEsci=studentiturn.'esci.'studentFinish.'deanturn.0;
+
+Studente1=studentiturn.'bussa.(enter.'deanturn.StudenteEsci1+not.'deanturn.Studente1); 
+StudenteEsci1=studentiturn.'esci.'studentFinish.'deanturn.0;
+
+Studente2=studentiturn.'bussa.(enter.'deanturn.StudenteEsci2+not.'deanturn.Studente2); 
+StudenteEsci2=studentiturn.'esci.'studentFinish.'deanturn.0;
+
+*Turno0=changeToDean.'deanturn.Turno1+changeToStudents.Turno0;
+*Turno1=changeToStudents.'studentiturn.Turno0+changeToDean.Turno1;
+Start='studentiturn.0;
+
+WaitAllStudents2=studentFinish.WaitAllStudents1;
+WaitAllStudents1=studentFinish.WaitAllStudents0;
+WaitAllStudents0=studentFinish.studentiturn.'finishstudents.0;
+
+Dean=deanturn.'status.(empty.'lock.'startedSearchingRoom.'studentiturn.DeanSearching+someone.'studentiturn.Dean+party.'lock.'partyDetected.'studentiturn.DeanFineParty);
+DeanFineParty=deanturn.'status.(someone.'studentiturn.DeanFineParty+party.'studentiturn.DeanFineParty+empty.'fineParty.'unlock.'studentiturn.Dean);
+DeanSearching=deanturn.'fineSearchingRoom.'unlock.'studentiturn.Dean+finishstudents.'fineSearchingRoom.'unlock.0;
+
+P=(Dean|Start|Room0|DoorUnlocked|Student0|Studente1|WaitAllStudents1)\{bussa,checkDoor,unlock,lock,studentiturn,deanturn,status,empty,party,someone,esci,enter,locked,unlocked,not,studentFinish,finishstudents};
