@@ -1,6 +1,7 @@
 package main
 
 import (
+	"color"
 	"time"
 )
 
@@ -173,7 +174,7 @@ func Dean(askturno chan bool, answerturno chan bool, lock chan bool, unlock chan
 				if !interrumptinparty {
 					println("EHM OPS")
 				} else {
-					println("STILl waiting guys")
+					println("Still waiting for room to be empty")
 				}
 			}
 			println("dean says room is ", roomstatus)
@@ -233,6 +234,8 @@ func main() {
 	entra := make(chan bool)
 	esci := make(chan bool)
 	roomstatus := make(chan string)
+
+	color.Cyan("Prints text in cyan.")
 
 	go Porta(lock, unlock, status, statusanswer, bussare, permesso, entra)
 	go Turno(askturno, answerturno, changetostudent, changetodean)
