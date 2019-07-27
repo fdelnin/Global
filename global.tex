@@ -15,7 +15,7 @@
 
 \title{Esercizi esame Linguaggi per il Global Computing}
 \author{Francesca Del Nin}
-\date{June 2019}
+\date{July 2019}
 
 \begin{document}
 
@@ -55,7 +55,7 @@ B(p[f]) &=  B(P)
 \paragraph{Dimostrazione} %$    \forall S \in CCS~  se ~ S~  finito ~ \Rightarrow ~ S ~ termina~  in~  un~  numero~  finito ~ di~  passi$ ovvero: $ S  ~finito,~ S \xrightarrow{\alpha}  S' ~ \Rightarrow~ size(S) > size(S') $
 
 Dimostro che se $ S \xrightarrow{\alpha}  S' ~ \implies ~ size(S) > size(S') $ e che se i sottoprocessi di S sono finiti (size S' è finita) allora S termina.
-Dimostrazione per induzione sulla struttura di S, l'ipotesi e che se i sottoprocessi di S terminano in un numero finito di passi allora anche S termina in un numero finito di passi.
+Dimostrazione per induzione sulla struttura di S, \\l'ipotesi è che\\\\ se i sottoprocessi di S terminano in un numero finito di passi allora anche S termina in un numero finito di passi.\\\\
 Inoltre è possibile dimostrare che anche il numero di stati raggiungibili è finito, l'ipotesi è che se il numero di stati stati raggiungibili dai sottoprocessi di S è finito, allora anche gli stati raggiungibili da S sono finiti.
 
 \paragraph{Caso Base S = 0}: 
@@ -303,10 +303,11 @@ Quindi $f(x)$ è un upper bound dell'insieme $S$, $\implies q=lub(S) \sqsubseteq
 
 Ora so che: $I$ è un complete lattice in quanto intervallo in un complete lattice, $\forall x \in I \; f(x):I \to I$, posso quindi applicare il punto \textbf{2} e vale che 
 \begin{center}
-$lfp$ di $f$ in $I \in I$ (e $P$)
+$q'=lfp$ di $f \in I$ (e $P$)
 \end{center}
 
-Allora $q= \sqcup S \in P$. 
+Per definizione di $q$, $q=glb(I)$, $\implies q \sqsubseteq q'$, quindi $q'$ è upper bound di $I$, ma siccome $q'$ è il least fixed point è in P, ma è il più piccolo elemento in P $\implies$ è least upper bound di $S$.
+%Allora $q= \sqcup S \in P$. 
 
 \begin{comment} 1 Sia $ S \subseteq P$ e $ s = \sqcup S$ (least upper bound di S), dimostro che esiste un elemento di P che è maggiore di tutti gli elementi di S, e che tale elemento è il più piccolo elemento di P (comunque più grande di S).
 

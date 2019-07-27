@@ -22,7 +22,7 @@ Start='changeToStudents.0;
 
 
 Dean=deanturn.'status.(empty.'lock.'changeToStudents.DeanSearching+someone.'changeToStudents.Dean+party.'lock.'changeToStudents.DeanFineParty);
-DeanFineParty=deanturn.'status.(someone.'changeToStudents.DeanFineParty+party.'changeToStudents.DeanFineParty+zero.'unlock.'changeToStudents.Dean);
+DeanFineParty=deanturn.'status.(someone.'changeToStudents.DeanFineParty+party.'changeToStudents.DeanFineParty+empty.'unlock.'changeToStudents.Dean);
 DeanSearching=deanturn.'unlock.'changeToStudents.Dean;
 
 P=(Dean|Start|Turno1|Room0|DoorUnlocked|Student0|Studente1)\{bussa,checkDoor,unlock,lock,studentiturn,deanturn,changeToStudents,changeToDean,status,empty,party,someone,esci,enter,locked,unlocked,not};

@@ -1,71 +1,90 @@
 package main
 
-const (
-	PartyPeople int = 3 //number of people that makes a party
-	Empty       int = 0 //number of people inside an "empty" room
-	Students    int = 5 //Number of students
+import (
+	"fmt"
+	"math/rand"
+	"strconv"
+	"time"
 )
 
-func Student(id int, turno chan bool, knock chan bool, permit chan bool, esci chan bool, changeTurnToDean chan bool, waitForStudents chan bool) {
+const (
+	StudentColor = "\033[1;34m%s\033[0m"
+	DeanColor    = "\033[1;33m%s\033[0m"
+	ErrorColor   = "\033[1;31m%s\033[0m"
+
+	PartyPeople int = 5  //number of people that makes a party
+	Students    int = 20 //Number of students
+)
+
+func Student(id int, turno chan bool, knock chan bool, permit chan bool, esci chan bool, studentSleep chan bool, waitForStudents chan bool) {
 	var wait = true
 	var myTurn bool
 	var response bool //this is the answer to knocking
-	println("Student n", id, "is in dormitory")
+
+	var printid string
+	printid = strconv.Itoa(id)
+	fmt.Printf("Student n " + printid + " is in dormitory\n")
 
 	for wait {
 		myTurn = <-turno
 
 		if myTurn == true {
-			println("Student", id, "has been woken up")
+			var str = "Student " + printid + " has been woken up\n"
+			fmt.Printf(StudentColor, str)
 			knock <- true
 			response = <-permit
 			if response { //sono entrato
 				//passo il turno
 				wait = false
-				changeTurnToDean <- true
+				str = "Student " + printid + " is  inside the room\n"
+				fmt.Printf(StudentColor, str)
+				studentSleep <- true
 			} else {
-				//nothing, aspetto e passo turno
-				changeTurnToDean <- true
+				//non posso entrare, aspetto
+				studentSleep <- true
 			}
 		}
 
 	}
-
-	//party
 
 	wait = true
 
 	for wait {
 		myTurn = <-turno
 		if myTurn == true {
-			println("Student", id, "has been woken up after partying")
+			var str = "Student "
+			str += strconv.Itoa(id)
+			str += " has been woken up after partying, exits room\n"
+			fmt.Printf(StudentColor, str)
 			esci <- true
 			wait = false
 		}
 	}
 
-	println("Student", id, "is going home")
-	changeTurnToDean <- true
-	//se sono lultimo devo risvegliare ild ean
+	studentSleep <- true
+
 	waitForStudents <- true
+
+	println("Student", id, "is going home")
 }
 
-func Room(bussa chan bool, studentexits chan bool, askStatus chan bool, statusRoom chan string, checkdoor chan bool, answerpermit chan bool, entrato chan bool) {
+func Room(bussa chan bool, studentexits chan bool, askStatus chan bool, statusRoom chan string,
+	checkdoor chan bool, answerpermit chan bool, entrato chan bool, turnOffLight chan bool, closeDoorForNight chan bool) {
 
+	var b = true
 	var numberOfStudents = 0
 	var status = "empty"
 
 	var permit bool
 
-	for { //room never ends
+	for b { //room never ends
 		select {
 		case <-bussa:
-
-			//chiedi porta
+			//chiedi se la porta è chiusa
 			checkdoor <- true
 			permit = <-answerpermit
 			if permit {
-				//se locked no se unlocked fai entrare
+				//se locked nessuno entra, se unlocked fai entrare
 				if numberOfStudents == 0 {
 					status = "someone"
 				} else if numberOfStudents == PartyPeople-1 {
@@ -73,13 +92,14 @@ func Room(bussa chan bool, studentexits chan bool, askStatus chan bool, statusRo
 
 				}
 				numberOfStudents++
-				println("A student entered, room status:", status)
+				println("Room status:", status)
 				entrato <- true
 
 			} else {
 				println("A student quietly walks away without enter")
 				entrato <- false
 			}
+
 		case <-studentexits:
 			numberOfStudents--
 			if numberOfStudents == 0 {
@@ -88,23 +108,28 @@ func Room(bussa chan bool, studentexits chan bool, askStatus chan bool, statusRo
 				status = "someone"
 
 			}
-			println("A student exits, room status:", status)
+			println("Room status:", status)
 
 		case <-askStatus:
 			//println("status asked", status)
 			statusRoom <- status
 
+		case <-turnOffLight:
+			b = false
 		}
 
 	}
+	fmt.Printf("Lights are off, Room Thread is ended\n")
+	closeDoorForNight <- true
 
 }
 
-func Door(knocking chan bool, answer chan bool, lock chan bool, unlock chan bool) {
-
+func Door(knocking chan bool, answer chan bool, lock chan bool, unlock chan bool,
+	turnOffLight chan bool, closeDoorForNight chan bool) {
+	var b = true
 	var locked = false //unlocked at the beginning
 
-	for { //does not end
+	for b { //does not end
 		select {
 		case <-knocking:
 			if locked {
@@ -131,40 +156,46 @@ func Door(knocking chan bool, answer chan bool, lock chan bool, unlock chan bool
 			}
 			locked = false
 
+		case <-closeDoorForNight:
+			b = false
 		}
 	}
 
+	fmt.Printf("Door Thread is ended\n")
+	turnOffLight <- true
+
 }
 
-func Turn(changeToStudent chan bool, changeToDean chan bool, wakeDean chan bool, wakeAStudent chan bool) { //ask chan bool, answer chan bool,
-	var currentTurn = true //true = turno studente
-
+func Turn(changeToStudent chan bool, studentWait chan bool, wakeDean chan bool, wakeAStudent chan bool) { //ask chan bool, answer chan bool,
 	for {
 		select {
-		//	case <-ask:
-		//		answer <- currentTurn
-
-		case <-changeToDean:
-			if !currentTurn {
-				println("TURN DOES NOT CHANGE D")
+		case <-studentWait:
+			var prob = randomProb()
+			if prob >= 40 {
+				println("\nDEAN TURN")
+				wakeDean <- true
+			} else {
+				println("\nSTUDENT TURN")
+				wakeAStudent <- true
 			}
-			currentTurn = false
-			println("\nDEAN TURN")
-			wakeDean <- true
-
 		case <-changeToStudent:
-			if currentTurn {
-				println("TURN DOES NOT CHANGE S")
+
+			var prob = randomProb()
+			if prob >= 60 {
+				println("\nDEAN TURN")
+				wakeDean <- true
+			} else {
+				println("\nSTUDENT TURN ")
+				wakeAStudent <- true
 			}
-			currentTurn = true
-			println("\nSTUDENT TURN")
-			wakeAStudent <- true
+
 		}
 	}
 
 }
 
-func Dean(askStatusRoom chan bool, answerStatusRoom chan string, lock chan bool, unlock chan bool, wakemedean chan bool, wakeAStudent chan bool, allGone chan bool) {
+func Dean(askStatusRoom chan bool, answerStatusRoom chan string, lock chan bool, unlock chan bool,
+	wakemedean chan bool, endTurnDean chan bool, allGone chan bool, turnOffLight chan bool) {
 
 	var imInRoom = false
 	//var myturn bool
@@ -181,32 +212,32 @@ func Dean(askStatusRoom chan bool, answerStatusRoom chan string, lock chan bool,
 				if room == "empty" {
 					imInRoom = false
 					if ImInterruptingParty {
-						println("Party is finally over")
+						fmt.Printf(DeanColor, "Party is finally over\n")
 						ImInterruptingParty = false
 
 					} else {
-						println("Finished searching")
+						fmt.Printf(DeanColor, "Finished searching\n")
 					}
 					unlock <- true
-					wakeAStudent <- true
+					endTurnDean <- true
 
 				} else if room == "someone" {
 					if ImInterruptingParty {
-						println("I'm still waiting for students to exit party")
+						fmt.Printf(DeanColor, "I'm still waiting for students to exit party\n")
 					} else {
-						println("Error?")
+						fmt.Printf(ErrorColor, "Error - Dean inside room with only some students")
 					}
 
-					wakeAStudent <- true
+					endTurnDean <- true
 
 				} else { //room is party
 
 					if ImInterruptingParty {
-						println("I'm waiting for students to exit party")
+						fmt.Printf(DeanColor, "I'm waiting for students to exit party\n")
 					} else {
-						println("Error party?")
+						fmt.Printf(ErrorColor, "Error - Dean inside but not interrupting party")
 					}
-					wakeAStudent <- true
+					endTurnDean <- true
 				}
 
 			} else {
@@ -214,36 +245,47 @@ func Dean(askStatusRoom chan bool, answerStatusRoom chan string, lock chan bool,
 				if room == "empty" {
 					lock <- true
 					imInRoom = true
-					println("Started searching inside the room")
-					wakeAStudent <- true
+					fmt.Printf(DeanColor, "Started searching inside the room\n")
+					endTurnDean <- true
 
 				} else if room == "someone" {
-					println("Waiting")
-					wakeAStudent <- true
+					fmt.Printf(DeanColor, "Waiting\n")
+					endTurnDean <- true
 
 				} else { //room is party
-					println("Party detected: I'm going to end this party")
+					fmt.Printf(DeanColor, "Party detected: I'm going to end this party\n")
 					lock <- true
 					imInRoom = true
 					ImInterruptingParty = true
-					wakeAStudent <- true
+					endTurnDean <- true
 				}
-
 			}
+
 		case <-allGone:
+
 			if imInRoom {
 				askStatusRoom <- true
 				room = <-answerStatusRoom
 				if room == "empty" {
 					unlock <- true
-					println("I'm exiting room")
+					fmt.Printf(DeanColor, "Dean exits room after all students are gone\n")
 				} else {
-					println("Error: some students are still here")
+					fmt.Printf(ErrorColor, "Error: some students are still inside nad Dean is going outside!")
 				}
 			}
+
+			turnOffLight <- true //to stop the door and room threads
+			<-turnOffLight
+			println("Dean goes home after all students")
 			allGone <- true
 		}
 	}
+
+}
+
+func randomProb() int {
+	// from 0 to 100
+	return rand.Intn(100)
 
 }
 
@@ -268,12 +310,18 @@ func main() {
 	waitForStudents := make(chan bool)
 	allGone := make(chan bool)
 
+	//this channels are for waiting functions end
+	turnOffLight := make(chan bool)
+	closeDoorForNight := make(chan bool)
+	//get random problability to change turns
+	rand.Seed(time.Now().UTC().UnixNano())
+
 	go Turn(changeTurnToStudent, changeTurnToDean, wakeDean, wakeAStudent)
 	changeTurnToStudent <- true //initialize turn
 
-	go Door(knocking, doorAnswer, lock, unlock)
-	go Room(studentAskToEnter, studentexit, askStatusRoom, answerStatusRoom, knocking, doorAnswer, knockingAnswer)
-	go Dean(askStatusRoom, answerStatusRoom, lock, unlock, wakeDean, changeTurnToStudent, allGone)
+	go Door(knocking, doorAnswer, lock, unlock, turnOffLight, closeDoorForNight)
+	go Room(studentAskToEnter, studentexit, askStatusRoom, answerStatusRoom, knocking, doorAnswer, knockingAnswer, turnOffLight, closeDoorForNight)
+	go Dean(askStatusRoom, answerStatusRoom, lock, unlock, wakeDean, changeTurnToStudent, allGone, turnOffLight)
 
 	var i = 0
 	for i != Students {
@@ -286,10 +334,12 @@ func main() {
 		<-waitForStudents
 		j++
 	}
-	println("All students are gone")
-	<-wakeAStudent
+
+	println("All students are gone\n")
+
 	allGone <- false //tell dean everyone is gone, do not wait turn from student
-	<-allGone        //receive signal from dean
+
+	<-allGone //receive signal from dean
 
 	println("END MAIN")
 }
