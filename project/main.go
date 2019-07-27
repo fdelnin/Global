@@ -36,7 +36,7 @@ func Student(id int, turno chan bool, knock chan bool, permit chan bool, esci ch
 			if response { //sono entrato
 				//passo il turno
 				wait = false
-				str = "Student " + printid + " is  inside the room\n"
+				str = "Student " + printid + " is inside the room\n"
 				fmt.Printf(StudentColor, str)
 				studentSleep <- true
 			} else {
@@ -52,9 +52,7 @@ func Student(id int, turno chan bool, knock chan bool, permit chan bool, esci ch
 	for wait {
 		myTurn = <-turno
 		if myTurn == true {
-			var str = "Student "
-			str += strconv.Itoa(id)
-			str += " has been woken up after partying, exits room\n"
+			var str = "Student " + printid + " has been woken up after partying, exits room\n"
 			fmt.Printf(StudentColor, str)
 			esci <- true
 			wait = false
@@ -65,10 +63,10 @@ func Student(id int, turno chan bool, knock chan bool, permit chan bool, esci ch
 
 	waitForStudents <- true
 
-	println("Student", id, "is going home")
+	fmt.Printf("Student %s is going home\n", printid)
 }
 
-func Room(bussa chan bool, studentexits chan bool, askStatus chan bool, statusRoom chan string,
+func Room(knock chan bool, studentexits chan bool, askStatus chan bool, statusRoom chan string,
 	checkdoor chan bool, answerpermit chan bool, entrato chan bool, turnOffLight chan bool, closeDoorForNight chan bool) {
 
 	var b = true
@@ -77,14 +75,14 @@ func Room(bussa chan bool, studentexits chan bool, askStatus chan bool, statusRo
 
 	var permit bool
 
-	for b { //room never ends
+	for b { //room ends when receives a signal on turnOffLightsChannel
 		select {
-		case <-bussa:
-			//chiedi se la porta è chiusa
+		case <-knock:
+			//check if door is locked
 			checkdoor <- true
 			permit = <-answerpermit
 			if permit {
-				//se locked nessuno entra, se unlocked fai entrare
+				//if locked no one can enter
 				if numberOfStudents == 0 {
 					status = "someone"
 				} else if numberOfStudents == PartyPeople-1 {
@@ -92,23 +90,23 @@ func Room(bussa chan bool, studentexits chan bool, askStatus chan bool, statusRo
 
 				}
 				numberOfStudents++
-				println("Room status:", status)
+				fmt.Printf("Room status:%s\n", status)
 				entrato <- true
 
 			} else {
-				println("A student quietly walks away without enter")
+				fmt.Printf("A student quietly walks away without enter\n")
 				entrato <- false
 			}
 
 		case <-studentexits:
 			numberOfStudents--
+
 			if numberOfStudents == 0 {
 				status = "empty"
 			} else if numberOfStudents == PartyPeople-1 {
 				status = "someone"
-
 			}
-			println("Room status:", status)
+			fmt.Printf("Room status:%s\n", status)
 
 		case <-askStatus:
 			//println("status asked", status)
@@ -129,30 +127,30 @@ func Door(knocking chan bool, answer chan bool, lock chan bool, unlock chan bool
 	var b = true
 	var locked = false //unlocked at the beginning
 
-	for b { //does not end
+	for b { //ends only when lights in the room are turned off
 		select {
 		case <-knocking:
 			if locked {
-				println("Door checked but room is locked")
+				fmt.Printf("Door checked but room is locked\n")
 				answer <- false
 			} else {
-				println("Door checked and room is unlocked")
+				fmt.Printf("Door checked and room is unlocked\n")
 				answer <- true
 			}
 
 		case <-lock:
 			if locked {
-				println("Weird, room is already locked!")
+				fmt.Printf("Weird, room is already locked!\n")
 			} else {
-				println("Door is now locked")
+				fmt.Printf("Door is now locked\n")
 			}
 			locked = true
 
 		case <-unlock:
 			if !locked {
-				println("Weird, room is already unlocked!")
+				fmt.Printf("Weird, room is already unlocked!\n")
 			} else {
-				println("Door is now unlocked")
+				fmt.Printf("Door is now unlocked\n")
 			}
 			locked = false
 
@@ -172,20 +170,20 @@ func Turn(changeToStudent chan bool, studentWait chan bool, wakeDean chan bool, 
 		case <-studentWait:
 			var prob = randomProb()
 			if prob >= 40 {
-				println("\nDEAN TURN")
+				fmt.Printf("\nDEAN TURN\n")
 				wakeDean <- true
 			} else {
-				println("\nSTUDENT TURN")
+				fmt.Printf("\nSTUDENT TURN\n")
 				wakeAStudent <- true
 			}
 		case <-changeToStudent:
 
 			var prob = randomProb()
 			if prob >= 60 {
-				println("\nDEAN TURN")
+				fmt.Printf("\nDEAN TURN\n")
 				wakeDean <- true
 			} else {
-				println("\nSTUDENT TURN ")
+				fmt.Printf("\nSTUDENT TURN\n")
 				wakeAStudent <- true
 			}
 
@@ -276,7 +274,7 @@ func Dean(askStatusRoom chan bool, answerStatusRoom chan string, lock chan bool,
 
 			turnOffLight <- true //to stop the door and room threads
 			<-turnOffLight
-			println("Dean goes home after all students")
+			fmt.Printf("Dean goes home after all students\n")
 			allGone <- true
 		}
 	}
@@ -290,10 +288,10 @@ func randomProb() int {
 }
 
 func main() {
+	// TODO: use values of channels instead of so many channels
 	knocking := make(chan bool)
 	knockingAnswer := make(chan bool)
 	doorAnswer := make(chan bool)
-	//turn := make(chan bool)
 	studentexit := make(chan bool)
 
 	changeTurnToStudent := make(chan bool)
