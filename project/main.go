@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+//Color for printing and number of people
 const (
 	StudentColor = "\033[1;34m%s\033[0m"
 	DeanColor    = "\033[1;33m%s\033[0m"
@@ -16,6 +17,7 @@ const (
 	Students    int = 20 //Number of students
 )
 
+//Student function
 func Student(id int, wakeMeUp chan bool, knock chan bool, permit chan bool, esci chan bool, studentSleep chan bool, waitForStudents chan bool) {
 
 	var wait = true
@@ -60,13 +62,12 @@ func Student(id int, wakeMeUp chan bool, knock chan bool, permit chan bool, esci
 
 	}
 
-	studentSleep <- true
-
 	waitForStudents <- true
 
 	fmt.Printf("Student %s is going home\n", printid)
 }
 
+//Room function
 func Room(knock chan bool, studentexits chan bool, askStatus chan bool, statusRoom chan string,
 	checkdoor chan bool, answerpermit chan bool, entrato chan bool, turnOffLight chan bool, closeDoorForNight chan bool) {
 
@@ -124,6 +125,7 @@ func Room(knock chan bool, studentexits chan bool, askStatus chan bool, statusRo
 
 }
 
+//Door function
 func Door(knocking chan bool, answer chan bool, doorLock chan bool,
 	turnOffLight chan bool, closeDoorForNight chan bool) {
 	var b = true
@@ -173,6 +175,7 @@ func Door(knocking chan bool, answer chan bool, doorLock chan bool,
 
 }
 
+// Turn to change turns
 func Turn(deanSleep chan bool, studentSleep chan bool, wakeDean chan bool, wakeAStudent chan bool) { //ask chan bool, answer chan bool,
 	for {
 		select {
@@ -204,6 +207,7 @@ func Turn(deanSleep chan bool, studentSleep chan bool, wakeDean chan bool, wakeA
 
 }
 
+//Dean function
 func Dean(askStatusRoom chan bool, answerStatusRoom chan string, doorLock chan bool,
 	wakemedean chan bool, endTurnDean chan bool, allGone chan bool, turnOffLight chan bool) {
 
@@ -353,6 +357,9 @@ func main() {
 	for j != Students {
 		<-waitForStudents
 		j++
+		if j < Students {
+			studentSleep <- true
+		}
 	}
 
 	println("All students are gone\n")
