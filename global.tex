@@ -30,7 +30,7 @@ Dimostrare che ogni processo del CCS finito termina in un numero finito di passi
 \end{center}
 
 \subsection{Dimostrazione con somme finite}
-Voglio dimostrare che  $\forall S \in CCS~  se ~ S \xrightarrow{\alpha}  S', ~S'~  finito ~ \implies  ~ S ~ termina~  in~  un~  numero~  finito ~ di~  passi$, definisco $size(S)$ come il numero di passi del processo S:
+Voglio dimostrare che  $\forall S \in CCS~  se ~ S \xrightarrow{\alpha}  S', ~S'~  finito ~ \implies  ~ S ~ termina~  in~  un~  numero~  finito ~ di~  passi$, definisco $size(S)$ come limite superiore al numero di passi del processo S:
 
 \begin{align*}
 size(0) &= 0 \\
@@ -54,13 +54,17 @@ B(p[f]) &=  B(P)
 
 \paragraph{Dimostrazione} %$    \forall S \in CCS~  se ~ S~  finito ~ \Rightarrow ~ S ~ termina~  in~  un~  numero~  finito ~ di~  passi$ ovvero: $ S  ~finito,~ S \xrightarrow{\alpha}  S' ~ \Rightarrow~ size(S) > size(S') $
 
-Dimostro che se $ S \xrightarrow{\alpha}  S' ~ \implies ~ size(S) > size(S') $ e che se i sottoprocessi di S sono finiti (size S' è finita) allora S termina.
-Dimostrazione per induzione sulla struttura di S, \\l'ipotesi è che\\\\ se i sottoprocessi di S terminano in un numero finito di passi allora anche S termina in un numero finito di passi.\\\\
-Inoltre è possibile dimostrare che anche il numero di stati raggiungibili è finito, l'ipotesi è che se il numero di stati stati raggiungibili dai sottoprocessi di S è finito, allora anche gli stati raggiungibili da S sono finiti.
+%Dimostro che se $ S \xrightarrow{\alpha}  S' ~ \implies ~ size(S) > size(S') $ e che se i sottoprocessi di S sono finiti (size S' è finita) allora S termina.
+%Dimostrazione per induzione sulla struttura di S, \\l'ipotesi è che\\\\ se i sottoprocessi di S terminano in un numero finito di passi allora anche S termina in un numero finito di passi.\\\\
+%Inoltre è possibile dimostrare che anche il numero di stati raggiungibili è finito, l'ipotesi è che se il numero di stati stati raggiungibili dai sottoprocessi di S è finito, allora anche gli stati raggiungibili da S sono finiti.
+
+Dimostro che se $S \passo S'$ e $S'$ è finisce in numero finito di passi (ovvero la sua $size$ è finita), allora anche $S$ termina in un numero finito di passi, ovvero che se i "sottoprocessi" di $S$ sono finiti anche $S$ lo è.
+La dimostrazione procede per induzione sulla stuttura di S, ovvero sui processi che formano S, l'ipotesi induttiva è che se i sottoprocessi di $S$ sono finiti anche $S$ lo è.
 
 \paragraph{Caso Base S = 0}: 
 
-S non esegue nessun passo per cui $S \not\passo$  $\implies$ S termina in un numero  finito di passi. Inoltre $B(0) = 1$ e $size(0) = 0$
+S non esegue nessun passo%per cui $S \not\passo$  $\implies$
+, S termina in un numero finito di passi. Inoltre $B(0) = 1$ e $size(0) = 0$ quindi entrambi sono finiti.
 
 \paragraph{Caso Induttivo Prefix S = $\alpha$.P}:
 
@@ -143,20 +147,19 @@ In questo caso la lunghezza è 0, l'unico processo di lunghezza 0 è $0$, che no
 in questo caso la lunghezza della dervazione è $n+1$ e per ipotesi sappiamo che fino alla lunghezza $n$ è vero che il processo termina in un numero finito di passi, ovvero $size($derivaizone fino ad $n) = k$ con $k$ finito.
 
 \paragraph{Caso $S=\alpha .P$}
-In questo caso alla derivazione di $P$ stiamo "aggiungendo" $\alpha$ e quindi $size(S)=1+size(P)$ e siccome $size(P)$ è finita per ipotesi induttiva anche $size(S)$ lo è.
+In questo caso alla derivazione di $P$ stiamo "aggiungendo" $\alpha$, ovvero un passo della derivazione.   $size(S)=1+size(P)$ e siccome $size(P)$ è finita per ipotesi induttiva anche $size(S)$ lo è.
 
 \paragraph{Caso $S= P|Q$}
-$P$ e $Q$ sono processi che terminano in un numero finito di passi, ovvero la loro funzione $size$ è finita. Sappiamo che $size(P+Q)=size(P)+size(Q)$ quindi è finita.
+$P$ e $Q$ sono processi con lunghezza di derivazione finita e che terminano in un numero finito di passi, ovvero la loro funzione $size$ è finita. Sappiamo che $size(P+Q)=size(P)+size(Q)$ quindi è finita.
 
 \paragraph{Caso $S=\pl$}
-In questo caso sappiamo che $P$ è finito e applichiamo una restrizione a P, il processo $S$ termina quindi in un numero finito di passi perchè $P$ termina per ipotesi e $size(S)=size(P)$.
+In questo caso sappiamo che $P$ ha lunghezza di derivazione finita e applichiamo una restrizione a P, ovvero un passo di derivazione. So che il processo $S$ termina quindi in un numero finito di passi perchè $P$ termina per ipotesi e $size(S)=size(P)$.
 
 \paragraph{Caso $S=S[f]$}
-$P$ termina per ipotesi induttiva e stiamo applicando una funzione di relabeling ai canali di $P$, $size(S)=size(P)$ e quindi termina in un numero finito di passi dato che $P$ termina in un numero finito di passi per ipotesi.
+$P$ ha lunghezza di derivazione fintia per ipotesi induttiva, e termina in un numero finito di passi. Stiamo applicando una funzione di relabeling ai canali di $P$ ovvero aggiungendo un apsso alla lunghezza di derivazione, inoltre $size(S)=size(P)$ e quindi termina in un numero finito di passi dato che $P$ termina in un numero finito di passi per ipotesi.
 
 \paragraph{Caso $S= \sum_{i \in I}P_{i}$}
-in questo caso la somma è infinta, ci sono quindi infiniti $P_{i}$ che vengono sommati, per ipotesi induttiva ognuno dei $P_{i}$ termina in un numero finito passi ovvero $size(P_{i})=k$ con $k$ finito. $size(S) = max\{size(P_{i})| i \in I\}$, ma sappiamo che ogni $size(P_{i})$ è finita per cui anche $size(S)$ è finita.\\\\\\
-
+in questo caso la somma è infinta, ci sono quindi infiniti $P_{i}$ che vengono sommati, per ipotesi induttiva ognuno dei $P_{i}$ termina in un numero finito passi ovvero $size(P_{i})=k$ con $k$ finito. $size(S) = max\{size(P_{i})| i \in I\}$, ma sappiamo che ogni $size(P_{i})$ è finita per cui anche $size(S)$ è finita.\\\\\
 Abbiamo quindi dimostrato che sia nel caso finito che nel caso infinito i processi CCS terminano in un numero finito di passi.
 
 
@@ -181,7 +184,14 @@ In questo caso $Q$ e $S$ sono processi che terminano per ipotesi, per cui S term
 \paragraph{Caso Induttivo S=\pl} In questo caso si applica la funzione di restriction al processo $P$ che per ipotesi termina, in questo caso anche S termina dato che $size(S)=size(P)$
 
 
-\paragraph{Caso Induttivo S=$\sum_{i\inI}Pi$} In questo caso $S=P_{1}+P_{2}+P_{3}+...$ e per ipotesi induttiva sappiamo che ogni $Pi$ è finito e termina in un numero finito di passi. In questo caso il processo $S$ fa un passo e va in $S'=Pi$ per qualche $i \in I$, quindi $size(S') = size(Pi)$ che per ipotesi è finita dato che il processo termina; $size(S)=max\{size(Pi), i\in I\}$ ma siccome ogni processo $Pi$ è finito per ipotesi, il massimo elemento è comunque finito, e quindi il processo termina in un numero finito di passi dato se si aggiunge un passo (quello della scelta).
+\paragraph{Caso Induttivo S=$\sum_{i\inI}Pi$} In questo caso $S=P_{1}+P_{2}+P_{3}+...$ e per ipotesi induttiva sappiamo che ogni $Pi$ è stato genetato da un numero finito di "passi di derivazione" e che termina in un numero finito di passi. In questo caso il processo $S$ fa un passo e va in $S'=Pi$ per qualche $i \in I$, quindi $size(S') = size(Pi)$ che per ipotesi è finita dato che il processo termina; $size(S)=max\{size(Pi), i\in I\}$ ma siccome ogni processo $Pi$ è finito per ipotesi, il massimo elemento è comunque finito, e quindi il processo termina in un numero finito di passi dato se si aggiunge un passo (quello della scelta).
+
+Dimsotro per induzione sul numero di processi sommati:
+\subparagraph{Caso Base:}
+caso base con lunghezza di derivazione 1 è il processo $0$, la cui $size$ è 0.
+\subparagraph{Caso Induttivo n+1}
+In questo caso per ipotesi induttiva vale per ogni sottoprocesso la lunghezza di derivazione è finita e che $S'=\sum_{n}Pi$ termina in un numero finito di passi.
+Aggiungendo il processo $n+1$esimo $S$ ha size finita perchè è $size(S)=max\{size(P0), size(P1)....size(Pn+1)\}$ e sono tutti processi che terminano in un numero finito di passi, per cui la loro $size $ è finita $\implies \; size(S) $ è finita.  
 
 
 Alt: se ci sono $0$ processi il caso base è banale. Per $n+1$ processi sappiamo che per $n$ è vero per ipotesi induttiva$_{2}$ e aggiungendo un processo $P_{n+1}$, quindi la scelta si riduce tra gli $n$ programmi precedenti e l'$n+1$esimo, ma $P_{n+1}$ ha derivazione di lunghezza finita per ipotesi, per cui siccome il numero di passi di S è delimitato dal numero di passi del più grade processo $P_{i}$ all'interno della somma, se tutti sono finiti anche $S$ sarà finito.
@@ -238,7 +248,8 @@ Dimostro che dato $P_{1}=\{x \in L | x  \sqsubseteq f(x)\}$ ovvero l'insieme di 
 
 %Si ha che $\forall x \in P_{1}$ vale $x \sqsubseteq f(x)$ per definizione, per monotonia di $f$ si ha che $f(x)\sqsubseteq f(f(x))$ $\implies$ $f(x) \in P_{1}$ 
 
-Sia $u=\sqcup P_{1}$ allora $\forall x \in P_{1} \; x \sqsubseteq u$ e per monotonia di $f$ vale anche che $\forall x \in P_{1} \; f(x)\sqsubseteq f(u)$ e per definizione di $P_{1}\; x \sqsubseteq f(x)$, questo indica che $f(u)$ è un upper bound dell'insieme $P_{1}$ (perché $x \sqsubseteq f(x) \sqsubseteq f(u)$ ). Ma $u$ è il least upper bound quindi $$u \sqsubseteq f(u) \implies u \in P_{1}$$.
+Sia $$u=\sqcup P_{1} \implies \forall x \in P_{1} \; x \sqsubseteq u$$
+ e per monotonia di $f$ vale anche che $$\forall x \in P_{1} \; f(x)\sqsubseteq f(u)$$ e per definizione di $P_{1}\; x \sqsubseteq f(x)$, questo indica che $f(u)$ è un \textbf{upper bound} dell'insieme $P_{1}$ (perché $x \sqsubseteq f(x) \sqsubseteq f(u)$ ). Ma $u$ è il least upper bound quindi $$u \sqsubseteq f(u) \implies u \in P_{1}$$.
 
 Dato che $u \in P_{1}$ per monotonia di $f$ si ha che $$f(u)\sqsubseteq f(f(u)) \implies f(u) \in P_{1}$$
  quindi $f(u)\sqsubseteq u$ Allora:
@@ -256,16 +267,16 @@ Ovvero $u=f(u)$  è il più grande fixed point di $f$ ed è il $least\; upper\; 
 
 %E' vero che $\forall x \in \pd \; x \sqsupseteq f(x)$ e per monotonia di $f$: $f(x) \sqsupseteq f(f(x)) \implies f(x) \in \pd$.
 
-Sia $l = \sqcap \pd $ allora $l \sqsubseteq x \; \forall x \in \pd$. Per monotonia di $f$ è vero che $\forall x \in \pd \; f(l) \sqsubseteq f(x)$ ovvero $f(l)$ è un lower bound di $\pd$.
+Sia $$l =glb(\pd)= \sqcap \pd \implies l \sqsubseteq x \; \forall x \in \pd$$. Per monotonia di $f$ è vero che $$\forall x \in \pd \; f(l) \sqsubseteq f(x)$$ ovvero $f(l)$ è un \textbf{lower bound} di $\pd$.
 
-$l$ è il greatest lower bound di $\pd$ quindi $l \sqsupseteq f(l) $, allora $l \in \pd$ ($l$ è in L perché $f:L\to L$).
+$l$ è il greatest lower bound di $\pd$ quindi $$l \sqsupseteq f(l) \implies l \in \pd$$ ($l$ è in L perché $f:L\to L$).
 
-Per monotonia di $f$: $f(l) \sqsupseteq f(f(l)) \Rightarrow f(l) \in \pd$ e quindi $l\sqsubseteq f(l)$ in quanto $l$ è greatest lower bound di $\pd$, ovvero è minore o uguale a tutti gli elementi di $\pd$. Quindi:
+Per monotonia di $f$: $$f(l) \sqsupseteq f(f(l)) \Rightarrow f(l) \in \pd$$ e quindi $l\sqsubseteq f(l)$ in quanto $l$ è greatest lower bound di $\pd$, ovvero è minore o uguale a tutti gli elementi di $\pd$. Quindi:
 \begin{itemize}
     \item $l\sqsupseteq f(l)$
     \item $f(l) \sqsupseteq l$
 \end{itemize}
-$\implies l = f(l) = \sqcap \pd $. $ l $ è chiaramente un fixed point, e siccome tutti i fixed point appartengono a $ \pd $ perchè $ \forall n \in P \; f(n) = n $ è vero anche che $ n \sqsupseteq f(n) \implies n \in P_{2} $ e $l=f(l)$ è il greatest lower bound di $\pd$ $\implies f(l) \sqsubseteq x \; \forall x \in \pd $ quindi è più piccolo di tutti gli elementi in $\pd$ quindi anche di tutti i fixed point, ovvero è il least fixed point di $f$ in $L$ ed appartiene a $L$ perché $f$ ha dominio in $L$.
+$\implies l = f(l) = \sqcap \pd $. $ l $ è chiaramente un fixed point, e siccome tutti i fixed point appartengono a $ \pd $ (perchè $ \forall n \in P \; f(n) = n $ è vero anche che $ n \sqsupseteq f(n) \implies n \in P_{2} $) e $l=f(l)$ è il greatest lower bound di $\pd$ $$\implies f(l) \sqsubseteq x \; \forall x \in \pd $$ quindi è più piccolo di tutti gli elementi in $\pd$ quindi anche di tutti i fixed point, ovvero è il least fixed point di $f$ in $L$ ed appartiene a $L$ perché $f$ ha dominio in $L$.
 
 \paragraph{Punto 3}
 Devo dimostrare che per ogni sottoinsieme di $P$ esistono $lub$ e $glb$ e cha appartengono a $P$, ovvero che sono punti fissi.
@@ -306,17 +317,18 @@ Ora so che: $I$ è un complete lattice in quanto intervallo in un complete latti
 $q'=lfp$ di $f \in I$ (e $P$)
 \end{center}
 
-Per definizione di $q$, $q=glb(I)$, $\implies q \sqsubseteq q'$, quindi $q'$ è upper bound di $I$, ma siccome $q'$ è il least fixed point è in P, ma è il più piccolo elemento in P $\implies$ è least upper bound di $S$.
+Per definizione di $q$, $q=glb(I)$, $\implies q \sqsubseteq q'$, quindi $q'$ è upper bound di $I$, ma siccome $q'$ è il least fixed point è in P, ma è il più piccolo elemento in i (e P) $\implies$ è least upper bound di $S$.
 %Allora $q= \sqcup S \in P$. 
-
-\begin{comment} 1 Sia $ S \subseteq P$ e $ s = \sqcup S$ (least upper bound di S), dimostro che esiste un elemento di P che è maggiore di tutti gli elementi di S, e che tale elemento è il più piccolo elemento di P (comunque più grande di S).
+\begin{comment}
+\section{Proof2}
+1 Sia $ S \subseteq P$ e $ s = \sqcup S$ (least upper bound di S), dimostro che esiste un elemento di P che è maggiore di tutti gli elementi di S, e che tale elemento è il più piccolo elemento di P (comunque più grande di S).
 
 Definisco $U = \{ x\in P| s \sqsubseteq x\}$ ovvero l'insieme degli elementi più grandi di $s$ in $P$ (upper closure). $U$ è quindi l'intervallo degli elementi da $s$ al Top element di $L$: $U=[s....\top]$. Si ha che $s \in U$.
-
-Ora dimostro che U è chiuso rispetto a $f$, ovvero:
+\end{comment}
+Ora dimostro che I è chiuso rispetto a $f$, ovvero:
 \paragraph{Definizione di chiusura} sia $f: S \to T$, e $S'\subseteq S$, allora si dice che $S'$ è chiuso rispetto ad $f$ se e solo se:
 $f[S'] \subseteq S'$, dove $f[S']$ è l'immagine di $f$ in $S$.\\
-
+\begin{comment}
 Quindi voglio dimostrare che $f[U] \subseteq U$. Dimostro che: 
 \begin{itemize}
     \item[\textbf{a}] $s \sqsubseteq f(s)$
@@ -337,8 +349,8 @@ Siccome $f: U \to U $ e U è un reticolo completo in quanto intervallo di un ret
 Siccome $s \sqsubseteq x \forall x \in U$ allora s è il greatest lower bound di U, quindi s = least fixed point di $f$ in $U$. Allora $S$ ha lub in $F$ perchè il lub di $S = s =$ least fixed point di $f$ in $U$ e quindi $\in F$.\\
 
 Analogamente i può dimostrare che $S$ ha glb in $F$, e siccome questo vale $\forall S \subseteq P \implies P$ è un reticolo completo
-\end{comment}
 
+\end{comment}
 \subsection{Knaster Tarski in CCS}
 
 Sia $R \subseteq Proc \times Proc$ tc se $(P, Q) \in R$ allora:
