@@ -54,12 +54,14 @@ B(p[f]) &=  B(P)
 
 \paragraph{Dimostrazione} %$    \forall S \in CCS~  se ~ S~  finito ~ \Rightarrow ~ S ~ termina~  in~  un~  numero~  finito ~ di~  passi$ ovvero: $ S  ~finito,~ S \xrightarrow{\alpha}  S' ~ \Rightarrow~ size(S) > size(S') $
 
-%Dimostro che se $ S \xrightarrow{\alpha}  S' ~ \implies ~ size(S) > size(S') $ e che se i sottoprocessi di S sono finiti (size S' è finita) allora S termina.
+Dimostro che dati processi con altezza di derivazione (albero di generazione dato dalla grammatica) finita allora la loro esecuizione è finita, questo perchè il numero di passi è superiormente limitato dall'atezza dell'albero e quindi è finito. 
+
+Dimostro che se $ S \xrightarrow{\alpha}  S' ~ \implies ~ size(S) > size(S') $ e che dato che l'albero di derivazione di S è finito per ipotesi allora anche i suoi sottoprocessi sono finiti e $size(S)>size(S')$ ovvero $S$ termina.
 %Dimostrazione per induzione sulla struttura di S, \\l'ipotesi è che\\\\ se i sottoprocessi di S terminano in un numero finito di passi allora anche S termina in un numero finito di passi.\\\\
 %Inoltre è possibile dimostrare che anche il numero di stati raggiungibili è finito, l'ipotesi è che se il numero di stati stati raggiungibili dai sottoprocessi di S è finito, allora anche gli stati raggiungibili da S sono finiti.
 
-Dimostro che se $S \passo S'$ e $S'$ è finisce in numero finito di passi (ovvero la sua $size$ è finita), allora anche $S$ termina in un numero finito di passi, ovvero che se i "sottoprocessi" di $S$ sono finiti anche $S$ lo è.
-La dimostrazione procede per induzione sulla stuttura di S, ovvero sui processi che formano S, l'ipotesi induttiva è che se i sottoprocessi di $S$ sono finiti anche $S$ lo è.
+%Dimostro che se $S \passo S'$ e $S'$ è finisce in numero finito di passi (ovvero la sua $size$ è finita), allora anche $S$ termina in un numero finito di passi, ovvero che se i "sottoprocessi" di $S$ sono finiti anche $S$ lo è.
+
 
 \paragraph{Caso Base S = 0}: 
 
@@ -68,7 +70,8 @@ S non esegue nessun passo%per cui $S \not\passo$  $\implies$
 
 \paragraph{Caso Induttivo Prefix S = $\alpha$.P}:
 
-Per la regola ACT $\alpha.P \xrightarrow{\alpha}P$ e per ipotesi induttiva so che P termina in un numero finito di passi (size(P) è finita). $size(S) = 1+ size(P)$ quindi anch'essa finita perche si aggiunge un passo ai passi (finiti) di P.
+Per la regola ACT $\alpha.P \xrightarrow{\alpha}P$, quindi  $size(S) = 1+ size(P)$ ovvero $size(S)>size(P)$ e per ipotesi è vero che $size(P)$ è finita quindi $S$ termina in un numero finito di passi.
+
 
 Inoltre è possibile dimostrare che anche il bound al numero di stati raggiungibili è finito dato che $B(P)$ è finito per ipotesi induttiva è $B(S) = B(P)+1$ e quidi finito.
 
@@ -319,38 +322,7 @@ $q'=lfp$ di $f \in I$ (e $P$)
 
 Per definizione di $q$, $q=glb(I)$, $\implies q \sqsubseteq q'$, quindi $q'$ è upper bound di $I$, ma siccome $q'$ è il least fixed point è in P, ma è il più piccolo elemento in i (e P) $\implies$ è least upper bound di $S$.
 %Allora $q= \sqcup S \in P$. 
-\begin{comment}
-\section{Proof2}
-1 Sia $ S \subseteq P$ e $ s = \sqcup S$ (least upper bound di S), dimostro che esiste un elemento di P che è maggiore di tutti gli elementi di S, e che tale elemento è il più piccolo elemento di P (comunque più grande di S).
 
-Definisco $U = \{ x\in P| s \sqsubseteq x\}$ ovvero l'insieme degli elementi più grandi di $s$ in $P$ (upper closure). $U$ è quindi l'intervallo degli elementi da $s$ al Top element di $L$: $U=[s....\top]$. Si ha che $s \in U$.
-\end{comment}
-Ora dimostro che I è chiuso rispetto a $f$, ovvero:
-\paragraph{Definizione di chiusura} sia $f: S \to T$, e $S'\subseteq S$, allora si dice che $S'$ è chiuso rispetto ad $f$ se e solo se:
-$f[S'] \subseteq S'$, dove $f[S']$ è l'immagine di $f$ in $S$.\\
-\begin{comment}
-Quindi voglio dimostrare che $f[U] \subseteq U$. Dimostro che: 
-\begin{itemize}
-    \item[\textbf{a}] $s \sqsubseteq f(s)$
-    \item[\textbf{b}] $\forall x \in U$ $s \sqsubseteq f(x)$
-\end{itemize}
-
-\paragraph{a} $\forall e \in S$ vale che $ e \sqsubseteq s$ per definizione di lub. Dato che $S$ è un sottoinsieme dei punti fissi vale che $ e = f(e)$ e per monotonia di $f $ vale che $f(e) \sqsubseteq f(s) \implies \forall e \in S. e \sqsubseteq f(s)$, ovvero $f(s)$ è un upper bound di S, ma per definizione di least upper bound si ha che $s \sqsubseteq f(s)$.
-
-\paragraph{b} $\forall x \in  U$ $s \sqsubseteq x$ per definizione di $U$. Per monotonia di $f$: $f(s) \sqsubseteq f(x)$, per \textbf{a} $s \sqsubseteq f(s) \implies s \sqsubseteq f(x) \forall x \in U$. \\\\
-
- Per \textbf{a} e \textbf{b} $\implies \forall x \in U $ $f(x) \in U$. Ovvero $U$ è chiuso rispetto ad $f$.
-
-
-Siccome $f: U \to U $ e U è un reticolo completo in quanto intervallo di un reticolo completo ($L$), e per \textbf{Punto 1} e \textbf{Punto 2} vale che $f:U \to U$ con $U$ reticolo completo ha lub e glb  in U $\implies f$ ha lub e glb in $U$ e lub=greatest fixed point e glb=least fixed point di $f$ in U.
-
-%to do dimostra che least fixed point è il lub di S , che vale lo stesso per glb e che vale per ogni sottoinsieme di P => p è complete lattica
-
-Siccome $s \sqsubseteq x \forall x \in U$ allora s è il greatest lower bound di U, quindi s = least fixed point di $f$ in $U$. Allora $S$ ha lub in $F$ perchè il lub di $S = s =$ least fixed point di $f$ in $U$ e quindi $\in F$.\\
-
-Analogamente i può dimostrare che $S$ ha glb in $F$, e siccome questo vale $\forall S \subseteq P \implies P$ è un reticolo completo
-
-\end{comment}
 \subsection{Knaster Tarski in CCS}
 
 Sia $R \subseteq Proc \times Proc$ tc se $(P, Q) \in R$ allora:
