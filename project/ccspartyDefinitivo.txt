@@ -27,7 +27,7 @@ DeanSearching=deanturn.'unlock.'changeToStudents.Dean;
 
 P=(Dean|Start|Turno1|Room0|DoorUnlocked|Student0|Studente1)\{bussa,checkDoor,unlock,lock,studentiturn,deanturn,changeToStudents,changeToDean,status,empty,party,someone,esci,enter,locked,unlocked,not};
 
-_______________________________--withfakechannels___________________
+_______________________________withfakechannels_____________________
 DoorLocked= unlock.DoorUnlocked+checkDoor.'locked.DoorLocked;
 DoorUnlocked= lock.DoorLocked+checkDoor.'unlocked.DoorUnlocked;
 
