@@ -56,11 +56,11 @@ B(p[f]) &=  B(P)
 
 Dimostro che dati processi con altezza di derivazione (albero di generazione dato dalla grammatica) finita allora la loro esecuizione è finita, questo perchè il numero di passi è superiormente limitato dall'atezza dell'albero e quindi è finito. 
 
-Dimostro che se $ S \passo  S' ~ \implies ~ size(S) > size(S') $ e che dato che l'albero di derivazione di S è finito per ipotesi allora anche i suoi sottoprocessi sono finiti e $size(S)>size(S')$, ovvero $S$ termina.
+Dimostro che se $ S \passo  S' ~ \implies ~ size(S) > size(S') $ e che dato che l'albero di derivazione di S è finito per ipotesi allora anche i suoi sottoalberi sono finiti e se per ogni processo che fa un passo vale che $size(S)>size(S')$, allora $S$ termina.
 
 Inoltre è possibile dimostrare che anche il numero di stati raggiungibili è finito, l'ipotesi è che se il numero di stati stati raggiungibili dai sottoprocessi di S è finito, allora anche gli stati raggiungibili da S sono finiti.
 
-Procedo per induzione sula lunghezza della derivazione:
+Procedo per induzione sulla lunghezza della derivazione della grammatica sopra riportata:
 
 \paragraph{Caso Base S = 0}: 
 
@@ -73,7 +73,7 @@ In questi casi la lunghezza della derivazione è $n+1$ e so che fino a lungheza 
 
 \paragraph{Caso Induttivo Prefix S = $\alpha$.P}:
 
-Per la regola ACT $\alpha.P \xrightarrow{\alpha}P$, quindi  $size(S) = 1+ size(P)$ ovvero $size(S)>size(P)$ e per ipotesi è vero che $size(P)$ è finita perchè l'altezza dell'albero di derivazione è $1- \text{altezza di } S$, quindi $P$ termina in un numero finito di passi e anche $S$ termina in un numero finito di passi.
+Per la regola ACT $\alpha.P \xrightarrow{\alpha}P$, quindi  $size(S) = 1+ size(P)$ ovvero $size(S)>size(P)$ e per ipotesi è vero che $size(P)$ è finita perchè l'altezza dell'albero di derivazione è $1- \text{altezza di } S$ e altezza di $S$ è finita, per ipotesi induttiva quindi $P$ termina in un numero finito di passi allora anche $S$ termina in un numero finito di passi.
 
 
 Inoltre è possibile dimostrare che anche il bound al numero di stati raggiungibili è finito dato che $B(P)$ è finito per ipotesi induttiva è $B(S) = B(P)+1$ e quidi finito.
@@ -146,7 +146,7 @@ In questo caso non è possibile dimostrare che il numero di stati raggiungibili 
 Si può comunque dimostrare che i processi che contengono scelte non deterministiche tra un numero infinito di processi terminano.\\
 
 Per fare ciò utilizzo la struttura della grammatica che genera CCS,
-l'ipotesi induttiva è quindi che se il processo generato ha lunghezza finita (indipendentemente dalla presenza di somme infinite) allora termina in un numero finito di passi.
+l'ipotesi induttiva è quindi che se il processo generato ha aktezza di derivazione finita (indipendentemente dalla presenza di somme infinite) allora termina in un numero finito di passi.
 
 Procedo per induzione sula lunghezza della derivazione, la dimostrazione è analoga a quella delle somme finite tranne nel caso della regola sum infinita:
 
@@ -265,8 +265,8 @@ Ora so che: $I$ è un complete lattice in quanto intervallo in un complete latti
 $q'=lfp$ di $f \in I$ (e $P$)
 \end{center}
 
-Per definizione di $q$, $q=glb(I)$, $\implies q \sqsubseteq q'$, quindi $q'$ è upper bound di $I$, ma siccome $q'$ è il least fixed point è in P, ma è il più piccolo elemento in i (e P) $\implies$ è least upper bound di $S$.
-%Allora $q= \sqcup S \in P$. 
+Per definizione di $q$, $q=glb(I)$, $\implies q \sqsubseteq q'$, quindi $q'$ è upper bound di $I$, ma siccome $q'$ è il least fixed point è in P, ma è il più piccolo elemento in I (e P) $\implies$ è least upper bound di $S$.
+Allora $q= \sqcup S \in P$. 
 
 \subsection{Knaster Tarski in CCS}
 
@@ -283,6 +283,5 @@ Allora se $(P,Q) \in R \implies (P,Q) \in F(R)$, ovvero $R \subseteq F(R)$ cioè
 F è monotona perchè più grande è R più coppie ci sono in F(R) (mantiene la relazione di $\sqsubseteq$ da $R$ a $F$).
 
 $R$ è bisimulazione sse $R \subseteq F(R)$. $ \sim= \cup$bisimulazioni cioè $\sim = \cup \{ R |R $ è bisimulazione$\} = \cup \{R | R \subseteq F(R)\} $ quindi $\sim = $ max Fixed Point$(F)$.
-%TODO scrivi meglio e dì perché è reticolo completo
 
 \end{document}
